@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "property_locations",
+  "info": {
+    "singularName": "property-location",
+    "pluralName": "property-locations",
+    "displayName": "property_location",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "properties": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::property.property",
+      "mappedBy": "property_location"
+    },
+    "title": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    }
+  }
+}

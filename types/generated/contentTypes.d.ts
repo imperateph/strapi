@@ -485,6 +485,103 @@ export interface PluginUsersPermissionsUser
   };
 }
 
+export interface ApiPropertyProperty extends Struct.CollectionTypeSchema {
+  collectionName: 'properties';
+  info: {
+    singularName: 'property';
+    pluralName: 'properties';
+    displayName: 'property';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    price: Schema.Attribute.Decimal &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    category: Schema.Attribute.Enumeration<['for rent', 'for sale']> &
+      Schema.Attribute.DefaultTo<'for sale'>;
+    state: Schema.Attribute.Enumeration<
+      ['sold', 'available', 'temporarily occupied']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'available'>;
+    main_image: Schema.Attribute.Media<'images' | 'files'> &
+      Schema.Attribute.Required;
+    images: Schema.Attribute.Media<'images' | 'files', true>;
+    property_id: Schema.Attribute.UID & Schema.Attribute.Required;
+    description: Schema.Attribute.Text;
+    lot_area: Schema.Attribute.String;
+    floor_area: Schema.Attribute.String;
+    bedroom_count: Schema.Attribute.Integer;
+    bathroom_count: Schema.Attribute.Integer;
+    garage_count: Schema.Attribute.Integer;
+    key_features: Schema.Attribute.Blocks;
+    home_features: Schema.Attribute.Blocks;
+    nearby_establishments: Schema.Attribute.Blocks;
+    property_location: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::property-location.property-location'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::property.property'
+    >;
+  };
+}
+
+export interface ApiPropertyLocationPropertyLocation
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'property_locations';
+  info: {
+    singularName: 'property-location';
+    pluralName: 'property-locations';
+    displayName: 'property_location';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    properties: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::property.property'
+    >;
+    title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::property-location.property-location'
+    >;
+  };
+}
+
 export interface AdminPermission extends Struct.CollectionTypeSchema {
   collectionName: 'admin_permissions';
   info: {
@@ -860,6 +957,8 @@ declare module '@strapi/strapi' {
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'api::property.property': ApiPropertyProperty;
+      'api::property-location.property-location': ApiPropertyLocationPropertyLocation;
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
       'admin::role': AdminRole;

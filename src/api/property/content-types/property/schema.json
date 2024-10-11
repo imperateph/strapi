@@ -1,0 +1,99 @@
+{
+  "kind": "collectionType",
+  "collectionName": "properties",
+  "info": {
+    "singularName": "property",
+    "pluralName": "properties",
+    "displayName": "property",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "price": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "for rent",
+        "for sale"
+      ],
+      "default": "for sale"
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "sold",
+        "available",
+        "temporarily occupied"
+      ],
+      "default": "available",
+      "required": true
+    },
+    "main_image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "property_id": {
+      "type": "uid",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "lot_area": {
+      "type": "string"
+    },
+    "floor_area": {
+      "type": "string"
+    },
+    "bedroom_count": {
+      "type": "integer"
+    },
+    "bathroom_count": {
+      "type": "integer"
+    },
+    "garage_count": {
+      "type": "integer"
+    },
+    "key_features": {
+      "type": "blocks"
+    },
+    "home_features": {
+      "type": "blocks"
+    },
+    "nearby_establishments": {
+      "type": "blocks"
+    },
+    "property_location": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::property-location.property-location",
+      "inversedBy": "properties"
+    }
+  }
+}
