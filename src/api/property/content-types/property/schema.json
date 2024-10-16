@@ -65,12 +65,6 @@
     "description": {
       "type": "text"
     },
-    "lot_area": {
-      "type": "string"
-    },
-    "floor_area": {
-      "type": "string"
-    },
     "bedroom_count": {
       "type": "integer"
     },
@@ -94,6 +88,20 @@
       "relation": "manyToOne",
       "target": "api::property-location.property-location",
       "inversedBy": "properties"
+    },
+    "property_type": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::property-type.property-type",
+      "inversedBy": "properties"
+    },
+    "lot_area_sq_m": {
+      "type": "decimal",
+      "min": 0
+    },
+    "floor_area_sq_m": {
+      "type": "decimal",
+      "min": 0
     }
   }
 }

@@ -520,8 +520,6 @@ export interface ApiPropertyProperty extends Struct.CollectionTypeSchema {
     images: Schema.Attribute.Media<'images' | 'files', true>;
     property_id: Schema.Attribute.UID & Schema.Attribute.Required;
     description: Schema.Attribute.Text;
-    lot_area: Schema.Attribute.String;
-    floor_area: Schema.Attribute.String;
     bedroom_count: Schema.Attribute.Integer;
     bathroom_count: Schema.Attribute.Integer;
     garage_count: Schema.Attribute.Integer;
@@ -532,6 +530,24 @@ export interface ApiPropertyProperty extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::property-location.property-location'
     >;
+    property_type: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::property-type.property-type'
+    >;
+    lot_area_sq_m: Schema.Attribute.Decimal &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
+    floor_area_sq_m: Schema.Attribute.Decimal &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      >;
     createdAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     publishedAt: Schema.Attribute.DateTime;
@@ -579,6 +595,63 @@ export interface ApiPropertyLocationPropertyLocation
       'oneToMany',
       'api::property-location.property-location'
     >;
+  };
+}
+
+export interface ApiPropertyTypePropertyType
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'property_types';
+  info: {
+    singularName: 'property-type';
+    pluralName: 'property-types';
+    displayName: 'property_type';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    title: Schema.Attribute.String;
+    properties: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::property.property'
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::property-type.property-type'
+    >;
+  };
+}
+
+export interface ApiStoryStory extends Struct.CollectionTypeSchema {
+  collectionName: 'stories';
+  info: {
+    singularName: 'story';
+    pluralName: 'stories';
+    displayName: 'story';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    quote: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    publishedAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::story.story'>;
   };
 }
 
@@ -959,6 +1032,8 @@ declare module '@strapi/strapi' {
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::property.property': ApiPropertyProperty;
       'api::property-location.property-location': ApiPropertyLocationPropertyLocation;
+      'api::property-type.property-type': ApiPropertyTypePropertyType;
+      'api::story.story': ApiStoryStory;
       'admin::permission': AdminPermission;
       'admin::user': AdminUser;
       'admin::role': AdminRole;

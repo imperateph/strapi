@@ -1,4 +1,4 @@
-export default [
+export default ({ env }) => [
   "strapi::logger",
   "strapi::errors",
   {
@@ -13,7 +13,7 @@ export default [
             "data:",
             "blob:",
             "market-assets.strapi.io",
-            "imperate-strapi.s3.ap-southeast-1.amazonaws.com",
+            env("AWS_BUCKET_URL", undefined),
           ],
           "media-src": [
             "'self'",
